@@ -8,7 +8,6 @@ import '@/components/login-form/login-form';
 import { theme } from './styles/theme';
 import {
   UserLoggedInEvent,
-  UserLoggedInEventPayload,
   UserLoggedInProp,
 } from './components/login-form/login-form.events';
 
