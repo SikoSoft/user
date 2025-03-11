@@ -1,7 +1,3 @@
-import { appState } from '@/state';
-import { config } from '../models/Config';
-import { storage } from './Storage';
-
 export interface ApiResponse<ResponseBodyType> {
   status: number;
   response: ResponseBodyType;
@@ -116,9 +112,9 @@ export class Api {
 }
 
 export const api = new Api({
-  authToken: '', //storage.getAuthToken(),
-  baseUrl: config.apiUrl,
+  authToken: '',
+  baseUrl: import.meta.env.APP_BASE_API_URL || '',
   errorHandler: () => {
-    appState.setForbidden(true);
+    console.error('Api encountered an error');
   },
 });
