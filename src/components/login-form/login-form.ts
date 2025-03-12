@@ -19,10 +19,7 @@ export class LoginForm extends LitElement {
   static styles = [
     theme,
     css`
-      .box {
-        padding: 1rem;
-        margin-bottom: 1rem;
-
+      form {
         ss-input,
         ss-button {
           display: block;
@@ -68,7 +65,7 @@ export class LoginForm extends LitElement {
 
   render() {
     return html`
-      <form class="box">
+      <form>
         <ss-input
           id="username"
           placeholder=${msg('Username')}

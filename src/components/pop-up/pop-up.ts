@@ -18,9 +18,12 @@ export class PopUp extends LitElement {
         left: 50%;
         transform: translate(-50%, -50%);
         background-color: white;
-        border: 1px solid black;
-        padding: 1rem;
+        border: 1px solid #666;
+        padding: 3rem;
+        box-sizing: border-box;
         z-index: 1000;
+        border-radius: 0.5rem;
+        box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1);
 
         &.open {
           display: block;
