@@ -22,6 +22,7 @@ export class UserPortal extends LitElement {
     Object.values(UserLoggedInProp).forEach(key => {
       sessionStorage.setItem(key, e.detail[key]);
     });
+    this.popUpIsOpen = false;
   }
 
   private _togglePopUp() {
