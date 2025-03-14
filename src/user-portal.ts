@@ -67,8 +67,8 @@ export class UserPortal extends LitElement {
         <pop-up ?open=${this.popUpIsOpen}>
           <login-form @user-logged-in=${this._handleUserLoggedIn}></login-form>
         </pop-up>
-
-        <ss-button @click=${this._togglePopUp}>Login</ss-button>
+        ${import.meta.env.MODE === 'development' &&
+        html` <ss-button @click=${this._togglePopUp}>Login</ss-button> `}
       </div>
     `;
   }
