@@ -64,7 +64,13 @@ export class UserPortal extends LitElement {
   render() {
     return html`
       <div>
-        <pop-up ?open=${this.popUpIsOpen}>
+        <pop-up
+          ?open=${this.popUpIsOpen}
+          @pop-up-closed=${this.hideLoginForm}
+          closeButton
+          closeOnEsc
+          closeOnOutsideClick
+        >
           <login-form @user-logged-in=${this._handleUserLoggedIn}></login-form>
         </pop-up>
         ${import.meta.env.MODE === 'development' &&
