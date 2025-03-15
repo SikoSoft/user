@@ -1,10 +1,10 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 
+import '@ss/ui/components/pop-up';
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-button';
 import '@/components/login-form/login-form';
-import '@/components/pop-up/pop-up';
 
 import { theme } from './styles/theme';
 import {
