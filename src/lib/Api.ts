@@ -111,10 +111,20 @@ export class Api {
   }
 }
 
-export const api = new Api({
+export const devApi = new Api({
   authToken: '',
-  baseUrl: import.meta.env.APP_BASE_API_URL || '',
+  baseUrl: import.meta.env.APP_DEV_BASE_API_URL,
   errorHandler: () => {
     console.error('Api encountered an error');
   },
 });
+
+export const prodApi = new Api({
+  authToken: '',
+  baseUrl: import.meta.env.APP_PROD_BASE_API_URL,
+  errorHandler: () => {
+    console.error('Api encountered an error');
+  },
+});
+
+console.log('API', devApi, prodApi);

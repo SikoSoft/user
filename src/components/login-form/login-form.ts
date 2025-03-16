@@ -1,5 +1,5 @@
-import { css, html, LitElement } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { css, html, LitElement, PropertyValues } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
 import { msg } from '@lit/localize';
 
 import '@ss/ui/components/ss-button';
@@ -11,11 +11,18 @@ import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
 import { UserLoggedInEvent } from './login-form.events';
 
 import { theme } from '@/styles/theme';
-import { api } from '@/lib/Api';
+import { Api, devApi, prodApi } from '@/lib/Api';
 import { LoginRequestBody, LoginResponseBody } from '@/models/Identity';
+import {
+  LoginFormProp,
+  loginFormProps,
+  LoginFormProps,
+} from './login-form.models';
 
 @customElement('login-form')
 export class LoginForm extends LitElement {
+  //private api: Api;
+
   static styles = [
     theme,
     css`
@@ -29,9 +36,17 @@ export class LoginForm extends LitElement {
     `,
   ];
 
+  @property()
+  [LoginFormProp.ENV]: LoginFormProps[LoginFormProp.ENV] =
+    loginFormProps[LoginFormProp.ENV].default;
+
   @state() username: string = '';
   @state() password: string = '';
   @state() loading: boolean = false;
+
+  get api(): Api {
+    return this[LoginFormProp.ENV] === 'prod' ? prodApi : devApi;
+  }
 
   private _handleUsernameChanged(e: InputChangedEvent): void {
     this.username = e.detail.value;
@@ -51,7 +66,7 @@ export class LoginForm extends LitElement {
 
   private async _login(): Promise<void> {
     this.loading = true;
-    const result = await api.post<LoginRequestBody, LoginResponseBody>(
+    const result = await this.api.post<LoginRequestBody, LoginResponseBody>(
       'login',
       { username: this.username, password: this.password },
     );

@@ -8,5 +8,14 @@ export default defineConfig(({ command, mode }) => {
     base: env.BASE_URL || '/',
     envPrefix: 'APP_',
     plugins: [tsconfigPaths()],
+    build: {
+      rollupOptions: {
+        output: {
+          entryFileNames: `assets/[name].js`,
+          chunkFileNames: `assets/[name].js`,
+          assetFileNames: `assets/[name].[ext]`,
+        },
+      },
+    },
   };
 });

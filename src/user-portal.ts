@@ -1,9 +1,10 @@
 import { css, html, LitElement } from 'lit';
-import { customElement, state } from 'lit/decorators.js';
+import { customElement, property, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/pop-up';
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-button';
+import '@ss/ui/components/ss-icon';
 import '@/components/login-form/login-form';
 
 import { theme } from './styles/theme';
@@ -11,10 +12,19 @@ import {
   UserLoggedInEvent,
   UserLoggedInProp,
 } from './components/login-form/login-form.events';
+import {
+  UserPortalProp,
+  userPortalProps,
+  UserPortalProps,
+} from './user-portal.models';
 
 @customElement('user-portal')
 export class UserPortal extends LitElement {
   static styles = [theme];
+
+  @property()
+  [UserPortalProp.ENV]: UserPortalProps[UserPortalProp.ENV] =
+    userPortalProps[UserPortalProp.ENV].default;
 
   @state() popUpIsOpen = false;
 
@@ -71,10 +81,18 @@ export class UserPortal extends LitElement {
           closeOnEsc
           closeOnOutsideClick
         >
-          <login-form @user-logged-in=${this._handleUserLoggedIn}></login-form>
+          <login-form
+            env=${this.env}
+            @user-logged-in=${this._handleUserLoggedIn}
+          ></login-form>
         </pop-up>
         ${import.meta.env.MODE === 'development' &&
-        html` <ss-button @click=${this._togglePopUp}>Login</ss-button> `}
+        html`
+          <ss-button @click=${this._togglePopUp}>
+            <ss-icon name="profile" size="24" color="#444"></ss-icon>
+            Login</ss-button
+          >
+        `}
       </div>
     `;
   }
