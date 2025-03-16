@@ -17,5 +17,6 @@ export default defineConfig(({ command, mode }) => {
         },
       },
     },
+    esbuild: { legalComments: 'none' },
   };
 });
