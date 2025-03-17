@@ -20,7 +20,15 @@ import {
 
 @customElement('user-portal')
 export class UserPortal extends LitElement {
-  static styles = [theme];
+  static styles = [
+    theme,
+
+    css`
+      ss-icon {
+        vertical-align: middle;
+      }
+    `,
+  ];
 
   @property()
   [UserPortalProp.ENV]: UserPortalProps[UserPortalProp.ENV] =
