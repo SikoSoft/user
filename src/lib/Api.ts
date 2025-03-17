@@ -126,5 +126,3 @@ export const prodApi = new Api({
     console.error('Api encountered an error');
   },
 });
-
-console.log('API', devApi, prodApi);
