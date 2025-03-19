@@ -13,6 +13,7 @@ import {
   UserLoggedInProp,
 } from './components/login-form/login-form.events';
 import {
+  userPortalHeadLinks,
   UserPortalProp,
   userPortalProps,
   UserPortalProps,
@@ -61,27 +62,20 @@ export class UserPortal extends LitElement {
   }
 
   private _injectGoogleFonts() {
-    const link = document.createElement('link');
-    link.rel = 'preconnect';
-    link.href = 'https://fonts.googleapis.com';
-    document.head.appendChild(link);
-
-    const link2 = document.createElement('link');
-    link2.rel = 'preconnect';
-    link2.href = 'https://fonts.gstatic.com';
-    link2.crossOrigin = 'anonymous';
-    document.head.appendChild(link2);
-
-    const link3 = document.createElement('link');
-    link3.href =
-      'https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap';
-    link3.rel = 'stylesheet';
-    document.head.appendChild(link3);
+    userPortalHeadLinks.forEach(link => {
+      const el = document.createElement('link');
+      el.rel = link.rel;
+      el.href = link.href;
+      if (link.crossorigin) {
+        el.crossOrigin = link.crossorigin;
+      }
+      document.head.appendChild(el);
+    });
   }
 
   render() {
     return html`
-      <div>
+      <div class="user-portal">
         <pop-up
           ?open=${this.popUpIsOpen}
           @pop-up-closed=${this.hideLoginForm}
