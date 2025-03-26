@@ -8,7 +8,10 @@ import '@ss/ui/components/ss-select';
 
 import { InputChangedEvent } from '@ss/ui/events/input-changed';
 import { InputSubmittedEvent } from '@ss/ui/events/input-submitted';
-import { UserLoggedInEvent } from './login-form.events';
+import {
+  UserLoggedInEvent,
+  UserLoggedInFailedEvent,
+} from './login-form.events';
 
 import { theme } from '@/styles/theme';
 import { Api, devApi, prodApi } from '@/lib/Api';
@@ -21,8 +24,6 @@ import {
 
 @customElement('login-form')
 export class LoginForm extends LitElement {
-  //private api: Api;
-
   static styles = [
     theme,
     css`
@@ -75,12 +76,16 @@ export class LoginForm extends LitElement {
       this.dispatchEvent(new UserLoggedInEvent({ ...result.response }));
     }
 
+    if (result && result.status === 401) {
+      this.dispatchEvent(new UserLoggedInFailedEvent({}));
+    }
+
     this.loading = false;
   }
 
   render() {
     return html`
-      <form>
+      <form part="container">
         <ss-input
           id="username"
           placeholder=${msg('Username')}

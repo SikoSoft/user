@@ -21,3 +21,17 @@ export class UserLoggedInEvent extends CustomEvent<UserLoggedInEventPayload> {
     });
   }
 }
+
+export const userLoggedInFailedEventName = 'user-logged-in-failed';
+
+export type UserLoggedInFailedEventPayload = Record<string, never>;
+
+export class UserLoggedInFailedEvent extends CustomEvent<UserLoggedInFailedEventPayload> {
+  constructor(payload: UserLoggedInFailedEventPayload) {
+    super(userLoggedInFailedEventName, {
+      bubbles: true,
+      composed: true,
+      detail: payload,
+    });
+  }
+}

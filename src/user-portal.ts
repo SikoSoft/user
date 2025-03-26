@@ -1,15 +1,20 @@
 import { css, html, LitElement } from 'lit';
-import { customElement, property, state } from 'lit/decorators.js';
+import { customElement, property, query, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/pop-up';
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-icon';
+import '@ss/ui/components/notification-provider';
 import '@/components/login-form/login-form';
+
+import { NotificationProvider } from '@ss/ui/components/notification-provider';
+import { NotificationType } from '@ss/ui/components/notification-provider.models';
 
 import { theme } from './styles/theme';
 import {
   UserLoggedInEvent,
+  UserLoggedInFailedEvent,
   UserLoggedInProp,
 } from './components/login-form/login-form.events';
 import {
@@ -37,6 +42,10 @@ export class UserPortal extends LitElement {
 
   @state() popUpIsOpen = false;
 
+  @query('notification-provider') notificationProvider:
+    | NotificationProvider
+    | undefined;
+
   constructor() {
     super();
     this._injectGoogleFonts();
@@ -50,11 +59,24 @@ export class UserPortal extends LitElement {
     this.popUpIsOpen = false;
   }
 
+  private _notify(message: string, type: NotificationType) {
+    console.log('_notify', message);
+    if (this.notificationProvider) {
+      console.log('found notification-provider; use it');
+      this.notificationProvider.addNotification(message, type);
+    }
+  }
+
   private async _handleUserLoggedIn(e: UserLoggedInEvent) {
     Object.values(UserLoggedInProp).forEach(key => {
       sessionStorage.setItem(key, e.detail[key]);
     });
     this.hideLoginForm();
+    this._notify('You are now logged in', NotificationType.SUCCESS);
+  }
+
+  private async _handleUserLoggedInFailed(e: UserLoggedInFailedEvent) {
+    this._notify('Failed to log in', NotificationType.ERROR);
   }
 
   private _togglePopUp() {
@@ -86,10 +108,12 @@ export class UserPortal extends LitElement {
           <login-form
             env=${this.env}
             @user-logged-in=${this._handleUserLoggedIn}
+            @user-logged-in-failed=${this._handleUserLoggedInFailed}
           ></login-form>
         </pop-up>
         ${import.meta.env.MODE === 'development' &&
         html`
+          <notification-provider messageLife="3000"></notification-provider>
           <ss-button @click=${this._togglePopUp}>
             <ss-icon name="profile" size="24" color="#444"></ss-icon>
             Login</ss-button
