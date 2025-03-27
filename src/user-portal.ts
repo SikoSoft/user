@@ -60,9 +60,7 @@ export class UserPortal extends LitElement {
   }
 
   private _notify(message: string, type: NotificationType) {
-    console.log('_notify', message);
     if (this.notificationProvider) {
-      console.log('found notification-provider; use it');
       this.notificationProvider.addNotification(message, type);
     }
   }
@@ -113,7 +111,7 @@ export class UserPortal extends LitElement {
         </pop-up>
         ${import.meta.env.MODE === 'development' &&
         html`
-          <notification-provider messageLife="3000"></notification-provider>
+          <notification-provider messageLife="5000"></notification-provider>
           <ss-button @click=${this._togglePopUp}>
             <ss-icon name="profile" size="24" color="#444"></ss-icon>
             Login</ss-button
