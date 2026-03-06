@@ -1,4 +1,4 @@
-import { css, html, LitElement } from 'lit';
+import { css, html, LitElement, nothing } from 'lit';
 import { customElement, property, query, state } from 'lit/decorators.js';
 
 import '@ss/ui/components/pop-up';
@@ -59,7 +59,7 @@ export class UserPortal extends LitElement {
     this.popUpIsOpen = false;
   }
 
-  private _notify(message: string, type: NotificationType) {
+  private notify(message: string, type: NotificationType) {
     if (this.notificationProvider) {
       this.notificationProvider.addNotification(message, type);
     }
@@ -70,11 +70,11 @@ export class UserPortal extends LitElement {
       sessionStorage.setItem(key, e.detail[key]);
     });
     this.hideLoginForm();
-    this._notify('You are now logged in', NotificationType.SUCCESS);
+    this.notify('You are now logged in', NotificationType.SUCCESS);
   }
 
   private async _handleUserLoggedInFailed(e: UserLoggedInFailedEvent) {
-    this._notify('Failed to log in', NotificationType.ERROR);
+    this.notify('Failed to log in', NotificationType.ERROR);
   }
 
   private _togglePopUp() {
@@ -109,17 +109,20 @@ export class UserPortal extends LitElement {
             @user-logged-in-failed=${this._handleUserLoggedInFailed}
           ></login-form>
         </pop-up>
-        ${import.meta.env.MODE === 'development' &&
-        html`
-          <notification-provider
-            bottom
-            messageLife="5000"
-          ></notification-provider>
-          <ss-button @click=${this._togglePopUp}>
-            <ss-icon name="profile" size="24" color="#444"></ss-icon>
-            Login</ss-button
-          >
-        `}
+
+        ${import.meta.env.MODE === 'development'
+          ? html`
+              <notification-provider
+                bottom
+                messageLife="5000"
+              ></notification-provider>
+
+              <ss-button @click=${this._togglePopUp}>
+                <ss-icon name="profile" size="24" color="#444"></ss-icon>
+                Login</ss-button
+              >
+            `
+          : nothing}
       </div>
     `;
   }
