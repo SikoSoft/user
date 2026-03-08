@@ -40,7 +40,8 @@ export class UserPortal extends LitElement {
   [UserPortalProp.ENV]: UserPortalProps[UserPortalProp.ENV] =
     userPortalProps[UserPortalProp.ENV].default;
 
-  @state() popUpIsOpen = false;
+  @state() loginPopUpIsOpen = false;
+  @state() rolesPopUpIsOpen = false;
 
   @query('notification-provider') notificationProvider:
     | NotificationProvider
@@ -52,11 +53,19 @@ export class UserPortal extends LitElement {
   }
 
   showLoginForm() {
-    this.popUpIsOpen = true;
+    this.loginPopUpIsOpen = true;
   }
 
   hideLoginForm() {
-    this.popUpIsOpen = false;
+    this.loginPopUpIsOpen = false;
+  }
+
+  showRolesForm() {
+    this.rolesPopUpIsOpen = true;
+  }
+
+  hideRolesForm() {
+    this.rolesPopUpIsOpen = false;
   }
 
   private notify(message: string, type: NotificationType) {
@@ -77,8 +86,12 @@ export class UserPortal extends LitElement {
     this.notify('Failed to log in', NotificationType.ERROR);
   }
 
-  private _togglePopUp() {
-    this.popUpIsOpen = !this.popUpIsOpen;
+  private toggleLoginPopUp() {
+    this.loginPopUpIsOpen = !this.loginPopUpIsOpen;
+  }
+
+  private toggleRolesPopUp() {
+    this.rolesPopUpIsOpen = !this.rolesPopUpIsOpen;
   }
 
   private _injectGoogleFonts() {
@@ -97,7 +110,7 @@ export class UserPortal extends LitElement {
     return html`
       <div class="user-portal">
         <pop-up
-          ?open=${this.popUpIsOpen}
+          ?open=${this.loginPopUpIsOpen}
           @pop-up-closed=${this.hideLoginForm}
           closeButton
           closeOnEsc
@@ -110,6 +123,16 @@ export class UserPortal extends LitElement {
           ></login-form>
         </pop-up>
 
+        <pop-up
+          ?open=${this.rolesPopUpIsOpen}
+          @pop-up-closed=${this.hideRolesForm}
+          closeButton
+          closeOnEsc
+          closeOnOutsideClick
+        >
+          test
+        </pop-up>
+
         ${import.meta.env.MODE === 'development'
           ? html`
               <notification-provider
@@ -117,9 +140,14 @@ export class UserPortal extends LitElement {
                 messageLife="5000"
               ></notification-provider>
 
-              <ss-button @click=${this._togglePopUp}>
+              <ss-button @click=${this.toggleLoginPopUp}>
                 <ss-icon name="profile" size="24" color="#444"></ss-icon>
                 Login</ss-button
+              >
+
+              <ss-button @click=${this.toggleRolesPopUp}>
+                <ss-icon name="profile" size="24" color="#444"></ss-icon>
+                Manage Roles</ss-button
               >
             `
           : nothing}
