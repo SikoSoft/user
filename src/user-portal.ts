@@ -7,6 +7,7 @@ import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-icon';
 import '@ss/ui/components/notification-provider';
 import '@/components/login-form/login-form';
+import '@/components/user-list/user-list';
 
 import { NotificationProvider } from '@ss/ui/components/notification-provider';
 import { NotificationType } from '@ss/ui/components/notification-provider.models';
@@ -41,7 +42,7 @@ export class UserPortal extends LitElement {
     userPortalProps[UserPortalProp.ENV].default;
 
   @state() loginPopUpIsOpen = false;
-  @state() rolesPopUpIsOpen = false;
+  @state() userListPopUpIsOpen = false;
 
   @query('notification-provider') notificationProvider:
     | NotificationProvider
@@ -60,12 +61,12 @@ export class UserPortal extends LitElement {
     this.loginPopUpIsOpen = false;
   }
 
-  showRolesForm() {
-    this.rolesPopUpIsOpen = true;
+  showUserList() {
+    this.userListPopUpIsOpen = true;
   }
 
-  hideRolesForm() {
-    this.rolesPopUpIsOpen = false;
+  hideUserList() {
+    this.userListPopUpIsOpen = false;
   }
 
   private notify(message: string, type: NotificationType) {
@@ -90,8 +91,8 @@ export class UserPortal extends LitElement {
     this.loginPopUpIsOpen = !this.loginPopUpIsOpen;
   }
 
-  private toggleRolesPopUp() {
-    this.rolesPopUpIsOpen = !this.rolesPopUpIsOpen;
+  private toggleUserListPopUp() {
+    this.userListPopUpIsOpen = !this.userListPopUpIsOpen;
   }
 
   private _injectGoogleFonts() {
@@ -124,13 +125,13 @@ export class UserPortal extends LitElement {
         </pop-up>
 
         <pop-up
-          ?open=${this.rolesPopUpIsOpen}
-          @pop-up-closed=${this.hideRolesForm}
+          ?open=${this.userListPopUpIsOpen}
+          @pop-up-closed=${this.hideUserList}
           closeButton
           closeOnEsc
           closeOnOutsideClick
         >
-          test
+          <user-list env=${this.env}></user-list>
         </pop-up>
 
         ${import.meta.env.MODE === 'development'
@@ -145,9 +146,9 @@ export class UserPortal extends LitElement {
                 Login</ss-button
               >
 
-              <ss-button @click=${this.toggleRolesPopUp}>
+              <ss-button @click=${this.toggleUserListPopUp}>
                 <ss-icon name="profile" size="24" color="#444"></ss-icon>
-                Manage Roles</ss-button
+                Manage Users</ss-button
               >
             `
           : nothing}

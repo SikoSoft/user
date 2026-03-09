@@ -14,3 +14,13 @@ export interface RolesRequestBody {
 }
 
 export type RolesResponseBody = Record<string, never>;
+
+export interface UsersResponseBody {
+  users: {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    roles: string[];
+  }[];
+}

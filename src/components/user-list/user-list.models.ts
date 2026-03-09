@@ -1,16 +1,16 @@
 import { ApiEnv, defaultEnv } from '@/models/Api';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
-export enum RoleFormProp {
+export enum UserListProp {
   ENV = 'env',
 }
 
-export interface RoleFormProps extends PropTypes {
-  [RoleFormProp.ENV]: ApiEnv;
+export interface UserListProps extends PropTypes {
+  [UserListProp.ENV]: ApiEnv;
 }
 
-export const roleFormProps: PropConfigMap<RoleFormProps> = {
-  [RoleFormProp.ENV]: {
+export const userListProps: PropConfigMap<UserListProps> = {
+  [UserListProp.ENV]: {
     default: defaultEnv,
     control: 'text',
     description: 'The environment to use for the API',

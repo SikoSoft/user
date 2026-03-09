@@ -8,12 +8,16 @@ import '@ss/ui/components/ss-select';
 
 import { theme } from '@/styles/theme';
 import { Api, devApi, prodApi } from '@/lib/Api';
-import { RolesRequestBody, RolesResponseBody } from '@/models/Identity';
+import {
+  RolesRequestBody,
+  RolesResponseBody,
+  UsersResponseBody,
+} from '@/models/Identity';
 
-import { RoleFormProp, RoleFormProps, roleFormProps } from './role-form.models';
+import { UserListProp, UserListProps, userListProps } from './user-list.models';
 
-@customElement('role-form')
-export class RoleForm extends LitElement {
+@customElement('user-list')
+export class UserList extends LitElement {
   static styles = [
     theme,
     css`
@@ -28,14 +32,26 @@ export class RoleForm extends LitElement {
   ];
 
   @property()
-  [RoleFormProp.ENV]: RoleFormProps[RoleFormProp.ENV] =
-    roleFormProps[RoleFormProp.ENV].default;
+  [UserListProp.ENV]: UserListProps[UserListProp.ENV] =
+    userListProps[UserListProp.ENV].default;
 
   @state() loading: boolean = false;
   @state() roles: string[] = [];
 
   get api(): Api {
-    return this[RoleFormProp.ENV] === 'prod' ? prodApi : devApi;
+    return this[UserListProp.ENV] === 'prod' ? prodApi : devApi;
+  }
+
+  get classes(): Record<string, boolean> {
+    return {
+      'user-list': true,
+    };
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+
+    this.getUsers();
   }
 
   private async save(): Promise<void> {
@@ -48,15 +64,11 @@ export class RoleForm extends LitElement {
     this.loading = false;
   }
 
+  async getUsers(): Promise<void> {
+    const result = await this.api.get<UsersResponseBody>('user');
+  }
+
   render() {
-    return html`
-      <form>
-        <ss-button
-          @click=${this.save}
-          text=${msg('Save')}
-          ?loading=${this.loading}
-        ></ss-button>
-      </form>
-    `;
+    return html` <div class=${this.classes}>users</div> `;
   }
 }
