@@ -10,7 +10,11 @@ import { theme } from '@/styles/theme';
 import { Api, devApi, prodApi } from '@/lib/Api';
 import { RolesRequestBody, RolesResponseBody } from '@/models/Identity';
 
-import { RoleFormProp, RoleFormProps, roleFormProps } from './role-form.models';
+import {
+  UserRolesFormProp,
+  UserRolesFormProps,
+  userRolesFormProps,
+} from './user-roles-form.models';
 
 @customElement('user-roles-form')
 export class UserRolesForm extends LitElement {
@@ -28,14 +32,25 @@ export class UserRolesForm extends LitElement {
   ];
 
   @property()
-  [RoleFormProp.ENV]: RoleFormProps[RoleFormProp.ENV] =
-    roleFormProps[RoleFormProp.ENV].default;
+  [UserRolesFormProp.USER_ID]: UserRolesFormProps[UserRolesFormProp.USER_ID] =
+    userRolesFormProps[UserRolesFormProp.USER_ID].default;
+
+  @property({ type: Array })
+  [UserRolesFormProp.ROLES]: UserRolesFormProps[UserRolesFormProp.ROLES] =
+    userRolesFormProps[UserRolesFormProp.ROLES].default;
+
+  @property()
+  [UserRolesFormProp.ENV]: UserRolesFormProps[UserRolesFormProp.ENV] =
+    userRolesFormProps[UserRolesFormProp.ENV].default;
+
+  @property()
+  [UserRolesFormProp.USERNAME]: UserRolesFormProps[UserRolesFormProp.USERNAME] =
+    userRolesFormProps[UserRolesFormProp.USERNAME].default;
 
   @state() loading: boolean = false;
-  @state() roles: string[] = [];
 
   get api(): Api {
-    return this[RoleFormProp.ENV] === 'prod' ? prodApi : devApi;
+    return this[UserRolesFormProp.ENV] === 'prod' ? prodApi : devApi;
   }
 
   private async save(): Promise<void> {
@@ -51,6 +66,8 @@ export class UserRolesForm extends LitElement {
   render() {
     return html`
       <form>
+        <span class="username">${this[UserRolesFormProp.USERNAME]}</span>
+
         <ss-button
           @click=${this.save}
           text=${msg('Save')}

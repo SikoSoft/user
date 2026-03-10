@@ -1,6 +1,14 @@
 import { ApiEnv, defaultEnv } from '@/models/Api';
 import { PropConfigMap, PropTypes } from '@/models/Prop';
 
+export interface User {
+  userId: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  roles: string[];
+}
+
 export enum UserListProp {
   ENV = 'env',
 }

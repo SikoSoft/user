@@ -5,16 +5,20 @@ import { msg } from '@lit/localize';
 import '@ss/ui/components/ss-button';
 import '@ss/ui/components/ss-input';
 import '@ss/ui/components/ss-select';
+import '@/components/user-roles-form/user-roles-form';
 
 import { theme } from '@/styles/theme';
 import { Api, devApi, prodApi } from '@/lib/Api';
-import {
-  RolesRequestBody,
-  RolesResponseBody,
-  UsersResponseBody,
-} from '@/models/Identity';
+import { UsersResponseBody } from '@/models/Identity';
 
-import { UserListProp, UserListProps, userListProps } from './user-list.models';
+import {
+  User,
+  UserListProp,
+  UserListProps,
+  userListProps,
+} from './user-list.models';
+import { classMap } from 'lit/directives/class-map.js';
+import { repeat } from 'lit/directives/repeat.js';
 
 @customElement('user-list')
 export class UserList extends LitElement {
@@ -36,7 +40,7 @@ export class UserList extends LitElement {
     userListProps[UserListProp.ENV].default;
 
   @state() loading: boolean = false;
-  @state() roles: string[] = [];
+  @state() users: User[] = [];
 
   get api(): Api {
     return this[UserListProp.ENV] === 'prod' ? prodApi : devApi;
@@ -54,21 +58,31 @@ export class UserList extends LitElement {
     this.getUsers();
   }
 
-  private async save(): Promise<void> {
-    this.loading = true;
-    const result = await this.api.post<RolesRequestBody, RolesResponseBody>(
-      'roles',
-      { roles: this.roles },
-    );
-
-    this.loading = false;
-  }
-
   async getUsers(): Promise<void> {
     const result = await this.api.get<UsersResponseBody>('user');
+
+    console.log('API response for users:', result);
+
+    if (result && result.response) {
+      console.log('Users fetched successfully:', result.response);
+      this.users = result.response;
+    }
   }
 
   render() {
-    return html` <div class=${this.classes}>users</div> `;
+    return html`
+      <div class=${classMap(this.classes)}>
+        ${repeat(
+          this.users,
+          user => user.userId,
+          user =>
+            html`<user-roles-form
+              userId=${user.userId}
+              username=${user.username}
+              .roles=${user.roles}
+            ></user-roles-form>`,
+        )}
+      </div>
+    `;
   }
 }

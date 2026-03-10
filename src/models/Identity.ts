@@ -15,12 +15,10 @@ export interface RolesRequestBody {
 
 export type RolesResponseBody = Record<string, never>;
 
-export interface UsersResponseBody {
-  users: {
-    id: string;
-    username: string;
-    firstName: string;
-    lastName: string;
-    roles: string[];
-  }[];
-}
+export type UsersResponseBody = {
+  userId: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  roles: string[];
+}[];
