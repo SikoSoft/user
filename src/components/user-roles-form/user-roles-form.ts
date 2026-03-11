@@ -15,6 +15,11 @@ import {
   UserRolesFormProps,
   userRolesFormProps,
 } from './user-roles-form.models';
+import { repeat } from 'lit/directives/repeat.js';
+
+import '@ss/ui/components/tag-manager';
+
+import { TagsUpdatedEvent } from '@ss/ui/components/tag-manager.events';
 
 @customElement('user-roles-form')
 export class UserRolesForm extends LitElement {
@@ -48,16 +53,35 @@ export class UserRolesForm extends LitElement {
     userRolesFormProps[UserRolesFormProp.USERNAME].default;
 
   @state() loading: boolean = false;
+  @state() roleSuggestions: string[] = [];
+
+  get tagSuggestionsEnabled(): boolean {
+    return this.roleSuggestions.length > 0;
+  }
 
   get api(): Api {
     return this[UserRolesFormProp.ENV] === 'prod' ? prodApi : devApi;
   }
 
+  updateRoles(roles: string[]): void {
+    console.log('Updating roles:', roles);
+  }
+
+  async handleRoleSuggestionsRequested(): Promise<void> {
+    console.log('Role suggestions requested');
+
+    // Simulate fetching role suggestions from the API
+    setTimeout(() => {
+      this.roleSuggestions = ['Admin', 'Editor', 'Viewer'];
+      console.log('Role suggestions updated:', this.roleSuggestions);
+    }, 1000);
+  }
+
   private async save(): Promise<void> {
     this.loading = true;
-    const result = await this.api.post<RolesRequestBody, RolesResponseBody>(
-      'roles',
-      { roles: this.roles },
+    const result = await this.api.put<RolesRequestBody, RolesResponseBody>(
+      'user',
+      { userId: this[UserRolesFormProp.USER_ID], roles: this.roles },
     );
 
     this.loading = false;
@@ -67,6 +91,31 @@ export class UserRolesForm extends LitElement {
     return html`
       <form>
         <span class="username">${this[UserRolesFormProp.USERNAME]}</span>
+
+        <tag-manager
+          label=${msg('Roles')}
+          ?enableSuggestions=${this.tagSuggestionsEnabled}
+          @tags-updated=${(e: TagsUpdatedEvent): void => {
+            this.updateRoles(e.detail.tags);
+          }}
+          @tag-suggestions-requested=${this.handleRoleSuggestionsRequested}
+        >
+          <div slot="tags">
+            ${repeat(
+              this.roles,
+              role => role,
+              role => html`<data-item>${role}</data-item>`,
+            )}
+          </div>
+
+          <div slot="suggestions">
+            ${repeat(
+              this.roleSuggestions,
+              suggestion => suggestion,
+              suggestion => html`<data-item>${suggestion}</data-item>`,
+            )}
+          </div>
+        </tag-manager>
 
         <ss-button
           @click=${this.save}

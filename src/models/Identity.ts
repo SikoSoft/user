@@ -10,6 +10,7 @@ export interface LoginResponseBody {
 }
 
 export interface RolesRequestBody {
+  userId: string;
   roles: string[];
 }
 
