@@ -112,7 +112,7 @@ export class Api {
 }
 
 export const devApi = new Api({
-  authToken: '',
+  authToken: sessionStorage.getItem('authToken') || '',
   baseUrl: import.meta.env.APP_DEV_BASE_API_URL,
   errorHandler: () => {
     console.error('Api encountered an error');
@@ -120,7 +120,7 @@ export const devApi = new Api({
 });
 
 export const prodApi = new Api({
-  authToken: '',
+  authToken: sessionStorage.getItem('authToken') || '',
   baseUrl: import.meta.env.APP_PROD_BASE_API_URL,
   errorHandler: () => {
     console.error('Api encountered an error');
