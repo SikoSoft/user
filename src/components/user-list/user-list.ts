@@ -1,5 +1,6 @@
 import { css, html, LitElement } from 'lit';
 import { customElement, property, state } from 'lit/decorators.js';
+import { Identity } from 'api-spec/models';
 import { msg } from '@lit/localize';
 
 import '@ss/ui/components/ss-button';
@@ -11,12 +12,7 @@ import { theme } from '@/styles/theme';
 import { Api, devApi, prodApi } from '@/lib/Api';
 import { UsersResponseBody } from '@/models/Identity';
 
-import {
-  User,
-  UserListProp,
-  UserListProps,
-  userListProps,
-} from './user-list.models';
+import { UserListProp, UserListProps, userListProps } from './user-list.models';
 import { classMap } from 'lit/directives/class-map.js';
 import { repeat } from 'lit/directives/repeat.js';
 
@@ -40,7 +36,7 @@ export class UserList extends LitElement {
     userListProps[UserListProp.ENV].default;
 
   @state() loading: boolean = false;
-  @state() users: User[] = [];
+  @state() users: Identity.User[] = [];
 
   get api(): Api {
     return this[UserListProp.ENV] === 'prod' ? prodApi : devApi;
@@ -74,10 +70,10 @@ export class UserList extends LitElement {
       <div class=${classMap(this.classes)}>
         ${repeat(
           this.users,
-          user => user.userId,
+          user => user.id,
           user =>
             html`<user-roles-form
-              userId=${user.userId}
+              userId=${user.id}
               username=${user.username}
               .roles=${user.roles}
             ></user-roles-form>`,

@@ -17,7 +17,7 @@ export interface RolesRequestBody {
 export type RolesResponseBody = Record<string, never>;
 
 export type UsersResponseBody = {
-  userId: string;
+  id: string;
   username: string;
   firstName: string;
   lastName: string;

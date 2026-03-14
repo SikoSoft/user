@@ -40,7 +40,7 @@ export class UserRolesForm extends LitElement {
   [UserRolesFormProp.USER_ID]: UserRolesFormProps[UserRolesFormProp.USER_ID] =
     userRolesFormProps[UserRolesFormProp.USER_ID].default;
 
-  @property({ type: Array })
+  @property({ type: Array, reflect: true })
   [UserRolesFormProp.ROLES]: UserRolesFormProps[UserRolesFormProp.ROLES] =
     userRolesFormProps[UserRolesFormProp.ROLES].default;
 
@@ -65,6 +65,7 @@ export class UserRolesForm extends LitElement {
 
   updateRoles(roles: string[]): void {
     console.log('Updating roles:', roles);
+    this[UserRolesFormProp.ROLES] = roles;
   }
 
   async handleRoleSuggestionsRequested(): Promise<void> {
